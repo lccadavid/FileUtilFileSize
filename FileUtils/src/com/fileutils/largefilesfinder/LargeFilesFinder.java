@@ -3,7 +3,6 @@ package com.fileutils.largefilesfinder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +14,16 @@ public class LargeFilesFinder {
     private List<File> weightfiles = new ArrayList<File>();
     private static List<String> extFilterS;
     public final static int MB = 1024;
+    
+    private String path;
+    private long minWeightInMB;
+    
+    
+    public LargeFilesFinder (String path, long minWeightInMB, List<String> extFilterS) {
+        this.path = path;
+        this.minWeightInMB = minWeightInMB;
+        this.extFilterS = extFilterS;
+    }
 
     /**
      * 
@@ -22,16 +31,13 @@ public class LargeFilesFinder {
      * @param minWeightInMB
      * @param extFilter (extensions to be included as a filter)
      */
-    public static void exec(String path, long minWeightInMB, String... extFilter) {
-
-        extFilterS = Arrays.asList(extFilter);
-        LargeFilesFinder lff = new LargeFilesFinder();
-
+    public void exec() {
+        
         long minWeight = minWeightInMB * MB * MB; //byte to megabyte
 
         System.out.println("\nFinding files larger than " + minWeightInMB + "MB (" + minWeight + " bytes)");
 
-        lff.findFiles(path, minWeight);
+        findFiles(path, minWeight);
     }
 
     private void findFiles(String path, long minWeight) {
